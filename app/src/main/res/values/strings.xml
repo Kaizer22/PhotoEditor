@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PhotoEditor</string>
+    <string name="take_a_photo">Сфотографировать</string>
+    <string name="width">Ширина:</string>
+    <string name="height">Высота:</string>
+    <string name="change_brightness">Изменить яркость</string>
+
+    <string name="activity_title">Выберете фото</string>
+</resources>
