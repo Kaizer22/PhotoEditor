@@ -17,12 +17,15 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.ButtonBarLayout;
 import androidx.fragment.app.Fragment;
 
 import com.denis_sh.photoeditor.R;
 import com.shebut_dev.photoeditor.interaction.executor.JobExecutor;
 import com.shebut_dev.photoeditor.interaction.executor.PostExecutionThread;
+import com.shebut_dev.photoeditor.interaction.operations.ApplyEffect;
 import com.shebut_dev.photoeditor.interaction.operations.ChangeBrightness;
+import com.shebut_dev.photoeditor.interaction.operations.implementations.ApplyEffectImpl;
 import com.shebut_dev.photoeditor.interaction.operations.implementations.ChangeBrightnessImpl;
 import com.shebut_dev.photoeditor.presentation.executor.UIThread;
 import com.shebut_dev.photoeditor.presentation.mvp.presenter.PhotoEditorPresenter;
@@ -42,7 +45,8 @@ public class PhotoEditorFragment extends Fragment implements PhotoEditorView {
         PostExecutionThread postExecutionThread = UIThread.getInstance();
         ChangeBrightness changeBrightness = new ChangeBrightnessImpl(postExecutionThread,
                 jobExecutor);
-        presenter = new PhotoEditorPresenter(sourceImage, changeBrightness);
+        ApplyEffect applyEffect = new ApplyEffectImpl(postExecutionThread, jobExecutor);
+        presenter = new PhotoEditorPresenter(sourceImage, changeBrightness, applyEffect);
         presenter.setView(this);
     }
 
@@ -58,6 +62,10 @@ public class PhotoEditorFragment extends Fragment implements PhotoEditorView {
     private void initInteractions(View root) {
         Button getImage = root.findViewById(R.id.get_photo_button);
         Button changeBrightness = root.findViewById(R.id.change_bright);
+        Button applyBW = root.findViewById(R.id.button_apply_BW);
+
+        applyBW.setOnClickListener(l ->
+                presenter.applyEffect( 0.1f));
         changeBrightness.setOnClickListener(l ->
                 presenter.changeImageBrightness(5));
 

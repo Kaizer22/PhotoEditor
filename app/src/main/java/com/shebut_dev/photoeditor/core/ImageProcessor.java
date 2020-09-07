@@ -3,13 +3,17 @@ package com.shebut_dev.photoeditor.core;
 import android.graphics.Bitmap;
 
 import com.shebut_dev.photoeditor.core.effects.EffectBlackAndWhite;
+import com.shebut_dev.photoeditor.core.effects.EffectColorNoiseHard;
+import com.shebut_dev.photoeditor.core.effects.EffectColorNoiseSoft;
 import com.shebut_dev.photoeditor.core.effects.EffectNegative;
 
 public class ImageProcessor {
 
     public enum EffectType{
         BLACK_AND_WHITE,
-        NEGATIVE
+        NEGATIVE,
+        COLOR_NOISE_HARD,
+        COLOR_NOISE_SOFT
     }
 
     public static Bitmap changeBrightness(int value, Bitmap inputImage){
@@ -61,7 +65,7 @@ public class ImageProcessor {
         return inputImage;
     }
 
-    public static Bitmap applyEffect(int intensity, EffectType effect,
+    public static Bitmap applyEffect(float intensity, EffectType effect,
                                      Bitmap inputImage){
         switch (effect){
             case BLACK_AND_WHITE:
@@ -69,6 +73,12 @@ public class ImageProcessor {
                 break;
             case NEGATIVE:
                 inputImage = new EffectNegative().apply(inputImage, intensity);
+                break;
+            case COLOR_NOISE_HARD:
+                inputImage = new EffectColorNoiseHard().apply(inputImage, intensity);
+                break;
+            case COLOR_NOISE_SOFT:
+                inputImage = new EffectColorNoiseSoft().apply(inputImage, intensity);
                 break;
 
         }
