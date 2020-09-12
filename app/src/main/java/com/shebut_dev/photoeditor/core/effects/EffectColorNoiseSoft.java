@@ -11,6 +11,7 @@ public class EffectColorNoiseSoft implements BaseEffect {
     public Bitmap apply(Bitmap inputImage, float intensity) {
         Random r = new Random();
         int randomSeed = (int) (510 * intensity);
+        int factor = (int)(255 * intensity);
 
         int width = inputImage.getWidth();
         int height = inputImage.getHeight();
@@ -23,7 +24,6 @@ public class EffectColorNoiseSoft implements BaseEffect {
         int red;
         int green;
         int blue;
-        int rColor;
         int pixel;
 
         for (int i = 0; i < allPixels; i++) {
@@ -33,12 +33,9 @@ public class EffectColorNoiseSoft implements BaseEffect {
             green =  ((pixel >> 8) & 0xff);
             blue =  ((pixel) & 0xff);
 
-            //rColor = (red +blue + green) / 3;
-
-            //pixels[i] = pixels[i] & 0xFF000000 | (rColor << 16) & 0x00FF0000 | (rColor << 8) & 0x0000FF00 | rColor & 0x000000FF;
-            red += r.nextInt(randomSeed) - (255*intensity);
-            green += r.nextInt(randomSeed) - (255*intensity);
-            blue += r.nextInt(randomSeed) - (255*intensity);
+            red += r.nextInt(randomSeed) - factor;
+            green += r.nextInt(randomSeed) - factor;
+            blue += r.nextInt(randomSeed) - factor;
 
             if (red > 255){
              red = 255;

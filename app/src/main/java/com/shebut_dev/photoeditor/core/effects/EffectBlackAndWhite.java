@@ -10,9 +10,6 @@ import java.util.Random;
 public class EffectBlackAndWhite implements BaseEffect {
     @Override
     public Bitmap apply(Bitmap inputImage, float intensity) {
-        Random r = new Random();
-        int randomSeed = (int) (255 * intensity);
-
         int width = inputImage.getWidth();
         int height = inputImage.getHeight();
         int allPixels = width * height;

@@ -4,11 +4,14 @@ import android.graphics.Bitmap;
 
 import com.shebut_dev.photoeditor.core.BaseEffect;
 
-//Реализаци эффекта "Негатив"
-public class EffectNegative implements BaseEffect {
+import java.util.Random;
+
+public class EffectDiscreteColors implements BaseEffect {
+
     @Override
     public Bitmap apply(Bitmap inputImage, float intensity) {
-        int factor = (int) (255 * intensity);
+        int factor = (int)(255 * intensity);
+
         int width = inputImage.getWidth();
         int height = inputImage.getHeight();
         int allPixels = width * height;
@@ -17,24 +20,29 @@ public class EffectNegative implements BaseEffect {
                 0,0, width, height);
 
         //int alpha;
-        byte red;
-        byte green;
-        byte blue;
-        int rColor;
+        int red;
+        int green;
+        int blue;
+        int sum;
         int pixel;
 
         for (int i = 0; i < allPixels; i++) {
             pixel = pixels[i];
             //alpha  = (pixel >> 24) & 0xff;
-            red = (byte) ((pixel >> 16) & 0xff);
-            green = (byte) ((pixel >> 8) & 0xff);
-            blue = (byte) ((pixel) & 0xff);
+            red = ((pixel >> 16) & 0xff);
+            green =  ((pixel >> 8) & 0xff);
+            blue =  ((pixel) & 0xff);
+            sum = red + green + blue;
 
-            red = (byte) (factor - red);
-            green = (byte) (factor - green);
-            blue = (byte) (factor - blue);
-
-
+            if (sum > ((255 + factor) / 2) * 3){
+                red = 255;
+                green = 255;
+                blue = 255;
+            }else {
+                red = 0;
+                green = 0;
+                blue = 0;
+            }
             pixels[i] = pixels[i] & 0xFF000000 | (red << 16) & 0x00FF0000 | (green << 8) & 0x0000FF00 | blue & 0x000000FF;
         }
 

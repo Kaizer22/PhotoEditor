@@ -24,9 +24,13 @@ import com.denis_sh.photoeditor.R;
 import com.shebut_dev.photoeditor.interaction.executor.JobExecutor;
 import com.shebut_dev.photoeditor.interaction.executor.PostExecutionThread;
 import com.shebut_dev.photoeditor.interaction.operations.ApplyEffect;
+import com.shebut_dev.photoeditor.interaction.operations.ApplyMatrixFilter;
 import com.shebut_dev.photoeditor.interaction.operations.ChangeBrightness;
+import com.shebut_dev.photoeditor.interaction.operations.ChangeContrast;
 import com.shebut_dev.photoeditor.interaction.operations.implementations.ApplyEffectImpl;
+import com.shebut_dev.photoeditor.interaction.operations.implementations.ApplyMatrixFilterImpl;
 import com.shebut_dev.photoeditor.interaction.operations.implementations.ChangeBrightnessImpl;
+import com.shebut_dev.photoeditor.interaction.operations.implementations.ChangeContrastImpl;
 import com.shebut_dev.photoeditor.presentation.executor.UIThread;
 import com.shebut_dev.photoeditor.presentation.mvp.presenter.PhotoEditorPresenter;
 import com.shebut_dev.photoeditor.presentation.mvp.view.PhotoEditorView;
@@ -45,8 +49,13 @@ public class PhotoEditorFragment extends Fragment implements PhotoEditorView {
         PostExecutionThread postExecutionThread = UIThread.getInstance();
         ChangeBrightness changeBrightness = new ChangeBrightnessImpl(postExecutionThread,
                 jobExecutor);
+        ChangeContrast changeContrast = new ChangeContrastImpl(postExecutionThread,
+                jobExecutor);
         ApplyEffect applyEffect = new ApplyEffectImpl(postExecutionThread, jobExecutor);
-        presenter = new PhotoEditorPresenter(sourceImage, changeBrightness, applyEffect);
+        ApplyMatrixFilter applyMatrixFilter = new ApplyMatrixFilterImpl(postExecutionThread,
+                jobExecutor);
+        presenter = new PhotoEditorPresenter(sourceImage, changeBrightness, changeContrast,
+                applyEffect, applyMatrixFilter);
         presenter.setView(this);
     }
 
@@ -63,11 +72,17 @@ public class PhotoEditorFragment extends Fragment implements PhotoEditorView {
         Button getImage = root.findViewById(R.id.get_photo_button);
         Button changeBrightness = root.findViewById(R.id.change_bright);
         Button applyBW = root.findViewById(R.id.button_apply_BW);
+        Button changeContrast = root.findViewById(R.id.button_change_contrast);
+        Button applyMatrixFilter = root.findViewById(R.id.button_apply_filter);
 
         applyBW.setOnClickListener(l ->
                 presenter.applyEffect( 0.1f));
         changeBrightness.setOnClickListener(l ->
                 presenter.changeImageBrightness(5));
+        changeContrast.setOnClickListener(l ->
+                presenter.changeImageContrast(0.1f));
+        applyMatrixFilter.setOnClickListener(l ->
+                presenter.applyMatrixFilter(1f));
 
         editorField = root.findViewById(R.id.temp_image_view);
         getImage.setOnClickListener(l -> getImageFromDevice());
@@ -110,10 +125,12 @@ public class PhotoEditorFragment extends Fragment implements PhotoEditorView {
     public void updateImage() {
         editorField.setImageBitmap(
                 presenter.getSourceImage());
+        editorField.invalidate();
     }
 
     @Override
     public void updateImage(Bitmap bitmap) {
         editorField.setImageBitmap(bitmap);
+        editorField.invalidate();
     }
 }

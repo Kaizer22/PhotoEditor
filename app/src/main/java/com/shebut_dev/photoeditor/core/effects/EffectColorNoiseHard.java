@@ -23,7 +23,6 @@ public class EffectColorNoiseHard implements BaseEffect {
         byte red;
         byte green;
         byte blue;
-        int rColor;
         int pixel;
 
         for (int i = 0; i < allPixels; i++) {
@@ -33,28 +32,9 @@ public class EffectColorNoiseHard implements BaseEffect {
             green = (byte) ((pixel >> 8) & 0xff);
             blue = (byte) ((pixel) & 0xff);
 
-            //rColor = (red +blue + green) / 3;
-
-            //pixels[i] = pixels[i] & 0xFF000000 | (rColor << 16) & 0x00FF0000 | (rColor << 8) & 0x0000FF00 | rColor & 0x000000FF;
             red += r.nextInt(randomSeed);
             green += r.nextInt(randomSeed);
             blue += r.nextInt(randomSeed);
-
-            //if (red > 255){
-            // red = (byte) (255 - red);
-            //}else if (red < 0){
-            // red = (byte) -red;
-            //}
-            //if (green > 255){
-            // green = (byte) (255 - green);
-            //}else if (green < 0){
-            // green = -green;
-            //}
-            //if (blue > 255){
-            // blue = 255 - blue;
-            //}else if (green < 0){
-            // blue = -blue;
-            //}
 
             pixels[i] = pixels[i] & 0xFF000000 | ((int)red << 16) & 0x00FF0000 | ((int)green << 8) & 0x0000FF00 | (int)blue & 0x000000FF;
         }
